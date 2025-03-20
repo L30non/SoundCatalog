@@ -106,7 +106,7 @@
                                 <i class="fa-solid fa-download"></i>
                             </a>
                             <a href="{{route('sounds.show', $sound->id)}}" class="text-gray-400 hover:text-white transition-colors" title="View Details">
-                                <i class="fa-solid fa-expand"></i>
+                                <i class="fa-solid fa-expand"></i>  
                             </a>
                             
                             @can('manage-sound', $sound)

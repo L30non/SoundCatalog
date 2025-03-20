@@ -1,9 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-
-
-@foreach ($sounds as $sound)
     <div class="bg-black min-h-screen text-gray-200">
         <div class="container mx-auto max-w-2xl px-4 py-12">
             <!-- Header -->
@@ -13,8 +10,9 @@
             </div>
             
             <!-- Form -->
-            <form action="{{ route('sounds.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+            <form action="{{ route('sounds.update', $sound->id) }}" method="POST" enctype="multipart/form-data" class="space-y-6">
                 @csrf
+                @method('PUT')
                 
                 <!-- Title -->
                 <div>
@@ -24,9 +22,9 @@
                         id="title" 
                         name="title" 
                         required
+                        value="{{ $sound->title }}"
                         placeholder="Enter sound title"
                         class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-md text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors"
-                        $sounds->title
                     >
                 </div>
                 
@@ -38,6 +36,7 @@
                         id="artist" 
                         name="artist" 
                         required
+                        value="{{ $sound->artist }}"
                         placeholder="Artist name"
                         class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-md text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors"
                     >
@@ -53,6 +52,7 @@
                             id="genre" 
                             name="genre" 
                             required
+                            value="{{ $sound->genre }}"
                             placeholder="e.g. Rock, Jazz, Ambient"
                             class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-md text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors"
                         >
@@ -65,7 +65,7 @@
                             type="text" 
                             id="duration" 
                             name="duration" 
-                            value="00:00"
+                            value="{{ $sound->duration }}"
                             placeholder="00:00"
                             class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-md text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors"
                         >
@@ -81,7 +81,7 @@
                         rows="3" 
                         placeholder="Add some details about your sound..."
                         class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-md text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors resize-none"
-                    ></textarea>
+                    >{{ $sound->description }}</textarea>
                 </div>
                 
                 <!-- Category -->
@@ -94,7 +94,7 @@
                         class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-md text-white appearance-none focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors"
                     >
                         @foreach($categories as $category)
-                            <option value="{{ $category->id }}">{{ $category->name }}</option>
+                            <option value="{{ $category->id }}" {{ $sound->category_id == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
                         @endforeach
                     </select>
                     <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
@@ -120,7 +120,7 @@
                                     <p class="mb-1 text-sm text-gray-400"><span class="font-semibold">Click to upload</span> or drag and drop</p>
                                     <p class="text-xs text-gray-500">MP3, WAV, or OGG (MAX. 10MB)</p>
                                 </div>
-                                <input id="file_path" name="file_path" type="file" class="hidden" required />
+                                <input id="file_path" name="file_path" type="file" class="hidden" />
                             </label>
                         </div>
                     </div>
@@ -137,7 +137,7 @@
                                     <p class="mb-1 text-sm text-gray-400"><span class="font-semibold">Click to upload</span> or drag and drop</p>
                                     <p class="text-xs text-gray-500">JPG, PNG or GIF (MAX. 2MB)</p>
                                 </div>
-                                <input id="image_path" name="image_path" type="file" class="hidden" required />
+                                <input id="image_path" name="image_path" type="file" class="hidden" />
                             </label>
                         </div>
                     </div>
@@ -149,11 +149,10 @@
                         type="submit" 
                         class="w-full py-3 px-4 bg-green-500 hover:bg-green-600 rounded-full text-white font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
                     >
-                        Upload Sound
+                        Update Sound
                     </button>
                 </div>
             </form>
         </div>
     </div>
-@endforeach
 @endsection

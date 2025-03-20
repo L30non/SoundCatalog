@@ -15,20 +15,16 @@ Route::get('/', function () {
 });
 
 Route::middleware(['auth'])->group(function () {
-
-
-    Route::get('/sounds/{id}/edit', function () {
-        $sounds = \App\Models\Sound::where('status', 'approved')->get();
+    Route::get('/sounds/{id}/edit', function ($id) {
+        $sound = \App\Models\Sound::findOrFail($id);
         $categories = \App\Models\Category::all();
-        return view('sounds.edit', compact('sounds', 'categories'));
-    })->name('pending');
+        return view('sounds.edit', compact('sound', 'categories'));
+    })->name('sounds.edit');
 
     Route::get('/sounds/pending', function () {
         $sounds = \App\Models\Sound::where('status', 'pending')->get();
         return view('sounds.pending', compact('sounds'));
     })->name('pending');
-
-    
 
     Route::get('/sounds/approve/{id}', [AdminController::class, 'approve'])->name('admin.sounds.approve');
     Route::get('/sounds/deny/{id}', [AdminController::class, 'deny'])->name('admin.sounds.deny');

@@ -73,7 +73,7 @@ class SoundController extends Controller
             'description' => 'nullable|string',
             'duration' => 'required|string|max:255',
             'file_path' => 'required|file|mimes:mp3,wav',
-            'image_path' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            'image_path' => 'required|image|mimes:jpeg,png,jpg|max:10000',
             'category_id' => 'required|exists:categories,id',
         ]);
 
@@ -123,30 +123,45 @@ class SoundController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
-    {
-        $data = $request->validate([
-            'title' => 'required|string|max:255',
-            'artist' => 'required|string|max:255',
-            'genre' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'duration' => 'required|string|max:255',
-            'file_path' => 'required|file|mimes:mp3,wav',
-            'category_id' => 'required|exists:categories,id',
+{
+    $sound = Sound::findOrFail($id);
+    
+    $this->authorize('update', $sound);
+    
+    // Validate other fields
+    $data = $request->validate([
+        'title' => 'required|string|max:255',
+        'artist' => 'required|string|max:255',
+        'genre' => 'required|string|max:255',
+        'description' => 'nullable|string',
+        'duration' => 'required|string|max:255',
+        'category_id' => 'required|exists:categories,id',
+    ]);
+    
+    // Handle sound file upload if provided
+    if($request->hasFile('file_path')){
+        $validatedFile = $request->validate([
+            'file_path' => 'file|mimes:mp3,wav',
         ]);
-
-        $sound = Sound::findOrFail($id);
         
-        $this->authorize('update',$sound);
-        
-        if($request->hasFile('file_path')){
-            $filePath = $request->file('file_path')->store('sounds','public');
-            $sound->file_path = $filePath;
-        }
-        
-        $sound->update($data);
-
-        return redirect()->route('sounds.index')->with('success','Sound Edited Successully!!');
+        $filePath = $request->file('file_path')->store('sounds', 'public');
+        $data['file_path'] = $filePath;
     }
+    
+    // Handle image upload if provided
+    if($request->hasFile('image_path')){
+        $validatedImage = $request->validate([
+            'image_path' => 'file|mimes:jpg,jpeg,png,gif',
+        ]);
+        
+        $imagePath = $request->file('image_path')->store('images', 'public');
+        $data['image_path'] = $imagePath;
+    }
+    
+    $sound->update($data);
+    
+    return redirect()->route('sounds.index')->with('success', 'Sound Edited Successfully!');
+}
 
     /**
      * Remove the specified resource from storage.

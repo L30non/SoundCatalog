@@ -29,7 +29,7 @@ class SoundPolicy
      */
     public function create(User $user): bool
     {
-        return $user->isCreator() || $user->isAdmin();
+        return $user->isCreator() || $user->isAdmin() || $user->isUser();
     }
 
     /**
