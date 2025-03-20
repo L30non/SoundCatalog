@@ -40,5 +40,17 @@ class AuthServiceProvider extends ServiceProvider
             return $user->id === $sound->user_id || $user->isAdmin();
         });
 
+        Gate::define('create-sound',function($user){
+            return $user->isAdmin() || $user->isUser();
+        });
+
+        Gate::define('sound-approve',function($user){
+            return $user->isAdmin();
+        });
+
+        Gate::define('create-complaint',function($user){
+            return $user->isUser();
+        });
+
     }
 }

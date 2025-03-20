@@ -1,11 +1,14 @@
 @extends('layouts.app')
 
 @section('content')
+
+
+@foreach ($sounds as $sound)
     <div class="bg-black min-h-screen text-gray-200">
         <div class="container mx-auto max-w-2xl px-4 py-12">
             <!-- Header -->
             <div class="mb-8">
-                <h1 class="text-3xl font-bold text-white mb-2">Add Your Sound</h1>
+                <h1 class="text-3xl font-bold text-white mb-2">Edit your sound</h1>
                 <p class="text-gray-400">Share your audio with the world</p>
             </div>
             
@@ -23,6 +26,7 @@
                         required
                         placeholder="Enter sound title"
                         class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-md text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors"
+                        $sounds->title
                     >
                 </div>
                 
@@ -151,4 +155,5 @@
             </form>
         </div>
     </div>
+@endforeach
 @endsection

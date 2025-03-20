@@ -38,6 +38,16 @@ class SoundController extends Controller
         return view('sounds.index',compact('sounds','title','filter'));
     }
 
+    public function pending(){
+
+        $this->authorize('viewAny',Sound::class);
+
+        $sounds = Sound::where('status','pending')->paginate(10);
+
+        return view('sounds.pending',compact('sounds'));
+
+    }
+
     /**
      * Show the form for creating a new resource.
      */

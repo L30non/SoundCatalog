@@ -47,9 +47,11 @@ class User extends Authenticatable
         ];
     }
 
-    public function isAdmin(){
-        return $this->roles === 'admin';
+    public function isAdmin()
+    {
+        return $this->roles === 'admin'; // Adjust this according to your role management logic
     }
+
     public function isCreator(){
         return $this->roles === 'creator';
     }
